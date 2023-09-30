@@ -3,14 +3,6 @@ pipeline {
     tools {
         maven 'maven'
     }
-    environment {
-        TOMCAT_SERVER_NAME = 'http://192.168.100.55:8080/' // Replace with your Tomcat server name defined in Jenkins
-        TOMCAT_CREDENTIALS_ID = '30bc9812-7857-470b-be20-2cba0331c22f' // Replace with your Tomcat credentials ID in Jenkins
-        CONTEXT_PATH = '/jenkinsTest' // Specify the desired context path
-        WAR_FILE = '**/*.war' // Adjust the path to your WAR file if needed
-        TOMCAT_MANAGER_URL = "http://localhost:8080/manager/text" // Adjust the URL for your Tomcat Manager
-        TOMCAT_VERSION = 'Tomcat 10.1.8' // The name of the Tomcat installation you configured in Jenkins
-    }
 
     stages {
 
@@ -25,7 +17,7 @@ pipeline {
         stage('Deploy to Tomcat') {
             steps {
                 script {
-                   deploy adapters: [tomcat9(credentialsId: '30bc9812-7857-470b-be20-2cba0331c22f', path: 'jenkinsTest', url: 'http://192.168.100.55:8080/')], contextPath: 'C:/Program Files/Apache Software Foundation/Tomcat 10.1', war: '**/*.war'
+                   deploy adapters: [tomcat10(credentialsId: '30bc9812-7857-470b-be20-2cba0331c22f', path: 'jenkinsTest', url: 'http://192.168.100.55:8080/')], contextPath: 'C:/Program Files/Apache Software Foundation/Tomcat 10.1', war: '**/*.war'
                 }
             }
         }
