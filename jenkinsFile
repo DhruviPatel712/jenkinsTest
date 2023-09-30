@@ -19,7 +19,9 @@ pipeline {
                 script {
                   // deploy adapters: [tomcat9(credentialsId: '30bc9812-7857-470b-be20-2cba0331c22f', path: 'jenkinsTest', url: 'http://192.168.100.55:8080/')], contextPath: 'C:/Program Files/Apache Software Foundation/Tomcat 10.1', war: '**/*.war'
                   //deploy contextPath: 'C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1', war: '**/*.war'
-                    deploy adapters: [tomcat9(credentialsId: 'dhruvi', path: '', url: 'http://192.168.100.55:8080/')], contextPath: null, onFailure: false, war: '**/*.war'
+                  // deploy adapters: [tomcat9(credentialsId: 'dhruvi', path: '', url: 'http://192.168.100.55:8080/')], contextPath: null, onFailure: false, war: '**/*.war'
+
+                  deploy adapters: [tomcat9(credentialsId: 'dhruvi', path: '', url: 'http://192.168.100.55:8080/')], contextPath: 'C:/Program Files/Apache Software Foundation/Tomcat 10.1/webapps', onFailure: false, war: '**/*.war'
                 }
             }
         }
