@@ -1,30 +1,41 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'maven'
+    environment {
+        TOMCAT_SERVER_NAME = 'http://192.168.100.55:8080/' // Replace with your Tomcat server name defined in Jenkins
+        TOMCAT_CREDENTIALS_ID = '30bc9812-7857-470b-be20-2cba0331c22f' // Replace with your Tomcat credentials ID in Jenkins
+        CONTEXT_PATH = '/jenkinsTest' // Specify the desired context path
+        WAR_FILE = '**/*.war' // Adjust the path to your WAR file if needed
+        TOMCAT_MANAGER_URL = "http://localhost:8080/manager/text" // Adjust the URL for your Tomcat Manager
+        TOMCAT_VERSION = 'Tomcat 10' // The name of the Tomcat installation you configured in Jenkins
     }
+
     stages {
+        stage('Checkout') {
+            steps {
+                // Checkout your source code repository here
+                // For example, you can use 'git' to clone your project
+                // bat 'git clone -b master https://github.com/yourusername/your-repo.git'
+            }
+        }
 
         stage('Build') {
             steps {
-
-                 bat 'mvn clean package'
-
+                // Build your Java project and generate the WAR file
+                // For example, if you're using Maven:
+                // bat 'mvn clean package'
+                // or Gradle:
+                // bat './gradlew clean war'
             }
         }
 
         stage('Deploy to Tomcat') {
             steps {
                 script {
-                    def tomcatServer = 'http://192.168.100.55:8080/' // Replace with your Tomcat server name defined in Jenkins
-                    def warFile = '**/*.war' // Adjust the path to your WAR file if needed
-                    def contextPath = '/jenkinsTest' // Specify the desired context path
-
                     // Deploy the WAR file to Tomcat using the Tomcat Plugin
-                    step([$class: 'Tomcat10xAdapter', credentialsId: '30bc9812-7857-470b-be20-2cba0331c22f', path: contextPath, url: "http://192.168.100.55:8080/", war: warFile, serverName: tomcatServer])
-
-
+                    def tomcatInstallation = tool name: TOMCAT_VERSION, type: 'hudson.plugins.tomcat.TomcatInstallation'
+                    def tomcatHome = tomcatInstallation.forNode(env.NODE_NAME).forEnvironment(env)
+                    step([$class: 'Tomcat10xAdapter', credentialsId: TOMCAT_CREDENTIALS_ID, path: CONTEXT_PATH, url: TOMCAT_MANAGER_URL, war: WAR_FILE, serverName: TOMCAT_SERVER_NAME, tomcatInstallationName: TOMCAT_VERSION, containerId: 'tomcat'])
                 }
             }
         }
