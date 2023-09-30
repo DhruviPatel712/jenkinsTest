@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+
+        stage('Build') {
+            steps {
+                // Build your Java project and generate the WAR file
+                // For example, if you're using Maven:
+                 bat 'mvn clean package'
+                // or Gradle:
+                // bat './gradlew clean war'
+            }
+        }
+
+        stage('Deploy to Tomcat') {
+            steps {
+                script {
+                    def tomcatServer = 'http://192.168.100.55:8080/' // Replace with your Tomcat server name defined in Jenkins
+                    def warFile = '**/*.war' // Adjust the path to your WAR file if needed
+                    def contextPath = '/jenkinsTest' // Specify the desired context path
+
+                    // Deploy the WAR file to Tomcat using the Tomcat Plugin
+                    step([$class: 'Tomcat9xAdapter', credentialsId: '30bc9812-7857-470b-be20-2cba0331c22f', path: contextPath, url: "http://192.168.100.55:8080/", war: warFile, serverName: tomcatServer])
+                }
+            }
+        }
+    }
+}
