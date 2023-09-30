@@ -2,13 +2,6 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
-            steps {
-                // Checkout your source code repository here
-                // For example, you can use 'git' to clone your project
-                // bat 'git clone -b master https://github.com/yourusername/yourproject.git'
-            }
-        }
 
         stage('Build') {
             steps {
