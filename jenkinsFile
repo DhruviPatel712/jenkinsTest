@@ -22,7 +22,9 @@ pipeline {
                     def contextPath = '/jenkinsTest' // Specify the desired context path
 
                     // Deploy the WAR file to Tomcat using the Tomcat Plugin
-                    step([$class: 'Tomcat9xAdapter', credentialsId: '30bc9812-7857-470b-be20-2cba0331c22f', path: contextPath, url: "http://192.168.100.55:8080/", war: warFile, serverName: tomcatServer])
+                    step([$class: 'Tomcat10xAdapter', credentialsId: '30bc9812-7857-470b-be20-2cba0331c22f', path: contextPath, url: "http://192.168.100.55:8080/", war: warFile, serverName: tomcatServer])
+
+
                 }
             }
         }
