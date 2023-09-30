@@ -5,11 +5,9 @@ pipeline {
 
         stage('Build') {
             steps {
-                // Build your Java project and generate the WAR file
-                // For example, if you're using Maven:
+
                  bat 'mvn clean package'
-                // or Gradle:
-                // bat './gradlew clean war'
+
             }
         }
 
