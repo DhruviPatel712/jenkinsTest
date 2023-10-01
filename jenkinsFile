@@ -18,7 +18,9 @@ stages{
             parallel{
                 stage ("Deploy to Staging"){
                     steps {
-                      deploy adapters: [tomcat9(credentialsId: '30bc9812-7857-470b-be20-2cba0331c22f', path: 'C:/Program Files/Apache Software Foundation/Tomcat 10.1/webapps/', url: 'http://192.168.100.55:8080/')], contextPath: null, war: '**/*.war'
+                     // deploy adapters: [tomcat9(credentialsId: '30bc9812-7857-470b-be20-2cba0331c22f', path: 'C:/Program Files/Apache Software Foundation/Tomcat 10.1/webapps/', url: 'http://192.168.100.55:8080/')], contextPath: null, war: '**/*.war'
+
+                     deploy adapters: [tomcat9(credentialsId: '17b664e0-d5dd-48a4-9cc4-f880466df5e4', path: '', url: 'http://localhost:8080/')], contextPath: 'C:/Program Files/Apache Software Foundation/Tomcat 10.1', war: '**/*.war'
                     }
                 }
             }
