@@ -51,11 +51,13 @@ tools {
     }
 
     stages {
-//         stage('Checkout') {
-//             steps {
-//                 // You can add steps here to check out your source code from a version control system
-//             }
-//         }
+                 stage('Build') {
+                       steps {
+
+                            bat 'mvn clean package'
+
+                       }
+                   }
 
         stage('Deploy to Tomcat') {
             steps {
