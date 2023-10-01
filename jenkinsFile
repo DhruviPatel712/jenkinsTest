@@ -46,8 +46,8 @@ tools {
         TOMCAT_URL = 'http://localhost:8080'  // URL of your Tomcat server
         TOMCAT_USER = 'admin'  // Tomcat Manager username
         TOMCAT_PASSWORD = 'Test@123'  // Tomcat Manager password
-        WAR_FILE_PATH = 'E:/jenkinsTest/jenkinsTest/target'  // Path to your WAR file
-        CONTEXT_PATH = 'C:/Program Files/Apache Software Foundation/Tomcat 10.1/webapps/'  // The context path where you want to deploy your app
+        WAR_FILE_PATH = 'E:/jenkinsTest/jenkinsTest/target/'  // Path to your WAR file
+        CONTEXT_PATH = 'JenkinsTest'  // The context path where you want to deploy your app
     }
 
     stages {
