@@ -43,7 +43,7 @@ tools {
          maven 'maven'
      }
     environment {
-        TOMCAT_URL = 'http://localhost:8080'  // URL of your Tomcat server
+        TOMCAT_URL = 'https://98c6-103-240-79-198.ngrok-free.app/'  // URL of your Tomcat server
         TOMCAT_USER = 'admin'  // Tomcat Manager username
         TOMCAT_PASSWORD = 'Test@123'  // Tomcat Manager password
         WAR_FILE_PATH = 'E:/jenkinsTest/jenkinsTest/target/'  // Path to your WAR file
@@ -64,7 +64,7 @@ tools {
                 script {
                     // Use curl or PowerShell (Invoke-WebRequest) to deploy the WAR file to Tomcat Manager
                     def deployCommand = """
-                        curl -u ${TOMCAT_USER}:${TOMCAT_PASSWORD} ${TOMCAT_URL}/manager/text/deploy?path=${CONTEXT_PATH} -T ${WAR_FILE_PATH}
+                        curl -u ${TOMCAT_USER}:${TOMCAT_PASSWORD} ${TOMCAT_URL}/manager/text/deploy?path=${CONTEXT_PATH} -T "${WAR_FILE_PATH}"
                     """
 
                     // Execute the deploy command
