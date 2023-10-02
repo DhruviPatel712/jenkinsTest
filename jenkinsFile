@@ -97,7 +97,7 @@ pipeline {
 
                     // SSH command to copy the already built WAR file to the remote server
                     def sshCommand = """
-                        scp target//${warFileName} ${remoteServer.user}@${remoteServer.host}:${tomcatWeb}//${warFileName}
+                        scp target/${warFileName} ${remoteServer.user}@${remoteServer.host}:${tomcatWeb}/${warFileName}
                     """
 
                     def sshExitCode = bat(script: sshCommand, returnStatus: true)
