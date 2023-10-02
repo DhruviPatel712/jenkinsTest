@@ -102,7 +102,7 @@ pipeline {
                     ]
 
                     def warFileName = 'JenkinsTest.war'
-                    def localWarPath = 'C:\ProgramData\Jenkins\.jenkins\workspace\jenkins-first-test\target\JenkinsTest.war' // Replace with the actual path to your WAR file on Windows
+                    def localWarPath = 'C:\\ProgramData\Jenkins\.jenkins\workspace\jenkins-first-test\target\JenkinsTest.war' // Replace with the actual path to your WAR file on Windows
                     def remoteWarPath = '/opt/tomcat/webapps' // Replace with the desired path on the Linux server
 
                     // Compile and package using Maven
