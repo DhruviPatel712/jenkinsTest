@@ -79,8 +79,21 @@
 pipeline {
     agent any
 
-    stages {
-        stage('Connect to Remote Server') {
+ stages {
+
+
+    stage('Build WAR') {
+                steps {
+                    script {
+                        def mvnHome = tool name: 'maven', type: 'maven'
+                        def compilePackageCommand = "${mvnHome}\\bin\\mvn.cmd package"
+
+                        bat(script: compilePackageCommand)
+                    }
+                }
+         }
+
+        stage('Copy WAR to Linux Server') {
             steps {
                 script {
                     def remoteServer = [
@@ -88,31 +101,32 @@ pipeline {
                         user: 'root'
                     ]
 
-                    def tomcatWeb = '/home/techhive/Dhruvi'
                     def warFileName = 'JenkinsTest.war'
+                    def localWarPath = 'C:\\path\\to\\local\\JenkinsTest.war' // Replace with the actual path to your WAR file on Windows
+                    def remoteWarPath = '/opt/tomcat/webapps' // Replace with the desired path on the Linux server
 
                     // Compile and package using Maven
                     def mvnHome = tool name: 'maven', type: 'maven'
-                    def compilePackageCommand = "${mvnHome}//bin//mvn.cmd package"
+                    def compilePackageCommand = "${mvnHome}\\bin\\mvn.cmd package"
 
-                    // SSH command to copy the already built WAR file to the remote server
+
+
                     def sshCommand = """
-                        scp target/${warFileName} ${remoteServer.user}@${remoteServer.host}:${tomcatWeb}/${warFileName}
+                        scp -o StrictHostKeyChecking=no "${localWarPath}" "${remoteServer.user}@${remoteServer.host}:${remoteWarPath}"
                     """
 
                     def sshExitCode = bat(script: sshCommand, returnStatus: true)
 
                     if (sshExitCode == 0) {
-                        echo 'Deployment successful.'
+                        echo 'WAR file copied successfully to the Linux server.'
                     } else {
-                        error "Error deploying to Tomcat. Exit code: ${sshExitCode}"
+                        error "Error copying WAR file to Linux server. Exit code: ${sshExitCode}"
                     }
                 }
             }
         }
     }
 }
-
 
 
 
