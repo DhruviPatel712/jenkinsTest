@@ -76,50 +76,90 @@
 //
 // }
 
-node {
+pipeline {
+    agent any
 
-   def remoteServer = [
+    stages {
+        stage('Connect to Remote Server') {
+            steps {
+                script {
+                    def remoteServer = [
+                        host: '20.204.136.143',
+                        user: 'root',
+                        privateKeyPath: 'C://Users/admin/.ssh/id_rsa' // Path to your SSH private key
+                    ]
 
-           host: '20.204.136.143',
-           user: 'admin@SJ-DHRUVI_PATEL',
-           credentialsId: 'admin@SJ-DHRUVI_PATEL', // Use the actual SSH key credential ID
-           port: 22
-       ]
+                    def tomcatWeb = '/home/techhive/Dhruvi'
+                    def tomcatBin = '/path/to/remote/tomcat/bin'
+                    def warFileName = 'JenkinsTest.war'
+
+                    // Compile and package using Maven
+                    def mvnHome = tool name: 'maven', type: 'maven'
+                    def compilePackageCommand = "${mvnHome}/bin/mvn package"
+
+                    def sshCompilePackageCommand = """
+                        cd ${tomcatWeb}
+                        git clone https://github.com/DhruviPatel712/jenkinsTest.git
+                        cd jenkinsTest
+                        ${compilePackageCommand}
+                    """
+
+                    def sshCommand = """
+                        ssh -i ${remoteServer.privateKeyPath} -o StrictHostKeyChecking=no ${remoteServer.user}@${remoteServer.host} '
+                            ${sshCompilePackageCommand}
+                        '
+                    """
+
+                    def sshExitCode = sh(script: sshCommand, returnStatus: true)
+
+                    if (sshExitCode == 0) {
+                        echo 'SSH command executed successfully.'
+                    } else {
+                        error "Error executing SSH command. Exit code: ${sshExitCode}"
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Tomcat') {
+            steps {
+                script {
+                    def remoteServer = [
+                        host: '20.204.136.143',
+                        user: 'root',
+                        privateKeyPath: 'C://Users/admin/.ssh/id_rsa' // Path to your SSH private key
+                    ]
+
+                    def tomcatWeb = '/home/techhive/Dhruvi'
+                    def warFileName = 'JenkinsTest.war'
+
+                    def sshCommand = """
+                        scp -i ${remoteServer.privateKeyPath} -o StrictHostKeyChecking=no target/${warFileName} ${remoteServer.user}@${remoteServer.host}:${tomcatWeb}/${warFileName}
+                    """
+
+                    def sshExitCode = sh(script: sshCommand, returnStatus: true)
+
+                    if (sshExitCode == 0) {
+                        echo 'Deployment successful.'
+                    } else {
+                        error "Error deploying to Tomcat. Exit code: ${sshExitCode}"
+                    }
+                }
+            }
+        }
 
 
- def tomcatWeb = '/home/techhive/Dhruvi'
- //  def tomcatBin = 'C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\bin'
-   def tomcatStatus = ''
-//    stage('SCM Checkout'){
-//      git 'https://github.com/sivajavatechie/JenkinsWar.git'
-//    }
-   stage('Compile-Package-create-war-file'){
-      // Get maven home path
-      def mvnHome =  tool name: 'maven', type: 'maven'
-      bat "${mvnHome}/bin/mvn package"
-      }
-/*   stage ('Stop Tomcat Server') {
-               bat ''' @ECHO OFF
-               wmic process list brief | find /i "tomcat" > NUL
-               IF ERRORLEVEL 1 (
-                    echo  Stopped
-               ) ELSE (
-               echo running
-                  "${tomcatBin}\\shutdown.bat"
-                  sleep(time:10,unit:"SECONDS")
-               )
-'''
-   }*/
-   stage('Deploy to Tomcat'){
-     bat "copy target\\JenkinsTest.war \"${tomcatWeb}\\JenkinsTest.war\""
-   }
-      stage ('Start Tomcat Server') {
-         sleep(time:5,unit:"SECONDS")
-   //      bat "${tomcatBin}\\startup.bat"
-    //     sleep(time:100,unit:"SECONDS")
-   }
-
-
-
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
 
