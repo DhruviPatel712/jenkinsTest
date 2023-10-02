@@ -77,42 +77,49 @@
 // }
 
 node {
-    def remoteServer = [
-        host: '20.204.136.143',
-        user: 'admin@SJ-DHRUVI_PATEL', // Provide the SSH username here
-        keyFile: [
-            privateKeySource: specificKey('admin@SJ-DHRUVI_PATEL'), // Specify your SSH key credentials ID
-            keyFileLocation: '~/.ssh/id_rsa', // Path to your private key on Jenkins
-            passphrase: ''
-        ],
-        port: 22 // SSH port (default is 22)
-    ]
 
-        def tomcatWeb = '/home/techhive/Dhruvi/'
- //   def tomcatBin = '/path/to/remote/tomcat/bin'
-        def warFileName = 'JenkinsTest.war'
+   def remoteServer = [
 
-    stage('Compile-Package-create-war-file') {
-        sshCommand remote: remoteServer, command: """
-            cd ${tomcatWeb}
-            git clone https://github.com/sivajavatechie/JenkinsWar.git
-            cd JenkinsWar
-            ${tool name: 'maven', type: 'maven'}/bin/mvn package
-        """
-    }
+           host: '20.204.136.143',
+           user: 'admin@SJ-DHRUVI_PATEL',
+           credentialsId: 'admin@SJ-DHRUVI_PATEL', // Use the actual SSH key credential ID
+           port: 22
+       ]
 
-    stage('Deploy to Tomcat') {
-        sshPut remote: remoteServer, from: "target/${warFileName}", into: "${tomcatWeb}/${warFileName}"
-    }
 
- //   stage('Stop Tomcat Server') {
- //       sshCommand remote: remoteServer, command: "${tomcatBin}/shutdown.sh"
- //       sleep(time: 10, unit: "SECONDS")
- //   }
+ def tomcatWeb = '/home/techhive/Dhruvi'
+ //  def tomcatBin = 'C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\bin'
+   def tomcatStatus = ''
+//    stage('SCM Checkout'){
+//      git 'https://github.com/sivajavatechie/JenkinsWar.git'
+//    }
+   stage('Compile-Package-create-war-file'){
+      // Get maven home path
+      def mvnHome =  tool name: 'maven', type: 'maven'
+      bat "${mvnHome}/bin/mvn package"
+      }
+/*   stage ('Stop Tomcat Server') {
+               bat ''' @ECHO OFF
+               wmic process list brief | find /i "tomcat" > NUL
+               IF ERRORLEVEL 1 (
+                    echo  Stopped
+               ) ELSE (
+               echo running
+                  "${tomcatBin}\\shutdown.bat"
+                  sleep(time:10,unit:"SECONDS")
+               )
+'''
+   }*/
+   stage('Deploy to Tomcat'){
+     bat "copy target\\JenkinsTest.war \"${tomcatWeb}\\JenkinsTest.war\""
+   }
+      stage ('Start Tomcat Server') {
+         sleep(time:5,unit:"SECONDS")
+   //      bat "${tomcatBin}\\startup.bat"
+    //     sleep(time:100,unit:"SECONDS")
+   }
 
- //   stage('Start Tomcat Server') {
- //       sshCommand remote: remoteServer, command: "${tomcatBin}/startup.sh"
- //       sleep(time: 60, unit: "SECONDS") // Adjust the sleep time as needed
- //   }
+
+
 }
 
