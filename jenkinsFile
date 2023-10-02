@@ -85,17 +85,15 @@ pipeline {
                 script {
                     def remoteServer = [
                         host: '20.204.136.143',
-                        user: 'root',
-                        privateKeyPath: 'C://Users/admin/.ssh/id_rsa' // Path to your SSH private key
+                        user: 'root'
                     ]
 
                     def tomcatWeb = '/home/techhive/Dhruvi'
-                    def tomcatBin = '/path/to/remote/tomcat/bin'
                     def warFileName = 'JenkinsTest.war'
 
                     // Compile and package using Maven
                     def mvnHome = tool name: 'maven', type: 'maven'
-                    def compilePackageCommand = "${mvnHome}/bin/mvn package"
+                    def compilePackageCommand = "${mvnHome}\\bin\\mvn.cmd package"
 
                     def sshCompilePackageCommand = """
                         cd ${tomcatWeb}
@@ -105,12 +103,11 @@ pipeline {
                     """
 
                     def sshCommand = """
-                        ssh -i ${remoteServer.privateKeyPath} -o StrictHostKeyChecking=no ${remoteServer.user}@${remoteServer.host} '
-                            ${sshCompilePackageCommand}
-                        '
+                        ssh -o StrictHostKeyChecking=no ${remoteServer.user}@${remoteServer.host} `
+                            "${sshCompilePackageCommand}"
                     """
 
-                    def sshExitCode =bat(script: sshCommand, returnStatus: true)
+                    def sshExitCode = bat(script: sshCommand, returnStatus: true)
 
                     if (sshExitCode == 0) {
                         echo 'SSH command executed successfully.'
@@ -126,18 +123,16 @@ pipeline {
                 script {
                     def remoteServer = [
                         host: '20.204.136.143',
-                        user: 'root',
-                        privateKeyPath: 'C://Users/admin/.ssh/id_rsa' // Path to your SSH private key
+                        user: 'root'
                     ]
 
                     def tomcatWeb = '/home/techhive/Dhruvi'
-                    def warFileName = 'JenkinsTest.war'
 
                     def sshCommand = """
-                        scp -i ${remoteServer.privateKeyPath} -o StrictHostKeyChecking=no target/${warFileName} ${remoteServer.user}@${remoteServer.host}:${tomcatWeb}/${warFileName}
+                        scp target\\${warFileName} ${remoteServer.user}@${remoteServer.host}:${tomcatWeb}\\${warFileName}
                     """
 
-                    def sshExitCode =bat(script: sshCommand, returnStatus: true)
+                    def sshExitCode = bat(script: sshCommand, returnStatus: true)
 
                     if (sshExitCode == 0) {
                         echo 'Deployment successful.'
@@ -147,10 +142,9 @@ pipeline {
                 }
             }
         }
-
-
     }
 }
+
 
 
 
