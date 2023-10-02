@@ -93,43 +93,11 @@ pipeline {
 
                     // Compile and package using Maven
                     def mvnHome = tool name: 'maven', type: 'maven'
-                    def compilePackageCommand = "${mvnHome}//bin//mvn.cmd package"
+                    def compilePackageCommand = "${mvnHome}\\bin\\mvn.cmd package"
 
-                    def sshCompilePackageCommand = """
-                        cd ${tomcatWeb}
-                        git clone https://github.com/DhruviPatel712/jenkinsTest.git
-                        cd jenkinsTest
-                        ${compilePackageCommand}
-                    """
-
+                    // SSH command to copy the already built WAR file to the remote server
                     def sshCommand = """
-                        ssh -o StrictHostKeyChecking=no ${remoteServer.user}@${remoteServer.host} `
-                            "${sshCompilePackageCommand}"
-                    """
-
-                    def sshExitCode = bat(script: sshCommand, returnStatus: true)
-
-                    if (sshExitCode == 0) {
-                        echo 'SSH command executed successfully.'
-                    } else {
-                        error "Error executing SSH command. Exit code: ${sshExitCode}"
-                    }
-                }
-            }
-        }
-
-        stage('Deploy to Tomcat') {
-            steps {
-                script {
-                    def remoteServer = [
-                        host: '20.204.136.143',
-                        user: 'root'
-                    ]
-
-                    def tomcatWeb = '/home/techhive/Dhruvi'
-
-                    def sshCommand = """
-                        scp target//${warFileName} ${remoteServer.user}@${remoteServer.host}:${tomcatWeb}//${warFileName}
+                        scp target\\${warFileName} ${remoteServer.user}@${remoteServer.host}:${tomcatWeb}\\${warFileName}
                     """
 
                     def sshExitCode = bat(script: sshCommand, returnStatus: true)
@@ -144,6 +112,7 @@ pipeline {
         }
     }
 }
+
 
 
 
