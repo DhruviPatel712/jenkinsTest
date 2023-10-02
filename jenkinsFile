@@ -110,7 +110,7 @@ pipeline {
                         '
                     """
 
-                    def sshExitCode = sh(script: sshCommand, returnStatus: true)
+                    def sshExitCode =bat(script: sshCommand, returnStatus: true)
 
                     if (sshExitCode == 0) {
                         echo 'SSH command executed successfully.'
@@ -137,7 +137,7 @@ pipeline {
                         scp -i ${remoteServer.privateKeyPath} -o StrictHostKeyChecking=no target/${warFileName} ${remoteServer.user}@${remoteServer.host}:${tomcatWeb}/${warFileName}
                     """
 
-                    def sshExitCode = sh(script: sshCommand, returnStatus: true)
+                    def sshExitCode =bat(script: sshCommand, returnStatus: true)
 
                     if (sshExitCode == 0) {
                         echo 'Deployment successful.'
