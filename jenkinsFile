@@ -88,7 +88,7 @@ pipeline {
                         user: 'root'
                     ]
 
-                    def tomcatWeb = '/home/techhive/Dhruvi'
+                    def tomcatWeb = '\home\techhive\Dhruvi'
                     def warFileName = 'JenkinsTest.war'
 
                     // Compile and package using Maven
