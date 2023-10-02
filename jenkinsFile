@@ -93,7 +93,7 @@ pipeline {
 
                     // Compile and package using Maven
                     def mvnHome = tool name: 'maven', type: 'maven'
-                    def compilePackageCommand = "${mvnHome}\\bin\\mvn.cmd package"
+                    def compilePackageCommand = "${mvnHome}//bin//mvn.cmd package"
 
                     def sshCompilePackageCommand = """
                         cd ${tomcatWeb}
@@ -129,7 +129,7 @@ pipeline {
                     def tomcatWeb = '/home/techhive/Dhruvi'
 
                     def sshCommand = """
-                        scp target\\${warFileName} ${remoteServer.user}@${remoteServer.host}:${tomcatWeb}\\${warFileName}
+                        scp target//${warFileName} ${remoteServer.user}@${remoteServer.host}:${tomcatWeb}//${warFileName}
                     """
 
                     def sshExitCode = bat(script: sshCommand, returnStatus: true)
