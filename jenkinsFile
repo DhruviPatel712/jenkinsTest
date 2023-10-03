@@ -76,69 +76,25 @@
 //
 // }
 
+
 pipeline {
     agent any
 
- stages {
-
-
-    stage('Build WAR') {
-                steps {
-                    script {
-                        def mvnHome = tool name: 'maven', type: 'maven'
-                        def compilePackageCommand = "${mvnHome}\\bin\\mvn.cmd package"
-
-                        bat(script: compilePackageCommand)
-                    }
-                }
-         }
-
-        stage('Copy WAR to Linux Server') {
+    stages {
+        stage('Copy File to Linux Server') {
             steps {
                 script {
-                    def remoteServer = [
-                        host: '20.204.136.143',
-                        user: 'root',
-                        privateKeyPath: 'C://Users/admin/.ssh/id_rsa'
-                    ]
+                    def sourceFile = 'target/JenkinsTest.war' // Update to the correct path
+                    def destination = 'root@20.204.136.143:/home/techhive/Dhruvi/'
 
-                    def warFileName = 'JenkinsTest.war'
-                    def localWarPath = 'target/JenkinsTest.war' // Replace with the actual path to your WAR file on Windows
-                    def remoteWarPath = '/opt/tomcat/webapps/' // Replace with the desired path on the Linux server
-
-                    // Compile and package using Maven
-                    //def mvnHome = tool name: 'maven', type: 'maven'
-                   // def compilePackageCommand = "${mvnHome}\\bin\\mvn.cmd package"
-
-
-
-                    def sshCommand = """
-                       scp -o StrictHostKeyChecking=no "target/JenkinsTest.war" "root@20.204.136.143:/home/techhive/Dhruvi/"
-                    """
-
-                   def sshExitCode = bat(script: sshCommand, returnStatus: true)
-
-                   //bat """
-
-                   //ssh ${remoteServer.user}@${remoteServer.host} cp -rf ${localWarPath} ${remoteWarPath}
-                 // """
+                    echo "Copying ${sourceFile} to ${destination}"
+                    def sshExitCode = bat(script: "scp -o StrictHostKeyChecking=no \"${sourceFile}\" \"${destination}\"", returnStatus: true)
 
                     if (sshExitCode == 0) {
-                        echo 'WAR file copied successfully to the Linux server.'
+                        echo 'File copied successfully.'
                     } else {
-                        error "Error copying WAR file to Linux server. Exit code: ${sshExitCode}"
-                   }
-
-
-                    //scp "target/JenkinsTest.war" "root@20.204.136.143:/home/techhive/Dhruvi/"
-
-
-                  //  bat """
-
-                  //      scp -r "target/JenkinsTest.war" "root@20.204.136.143:/home/techhive/Dhruvi/"
-
-                   // """
-
+                        error "Error copying file. Exit code: ${sshExitCode}"
+                    }
                 }
             }
         }
