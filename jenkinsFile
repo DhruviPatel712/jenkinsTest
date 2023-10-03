@@ -106,10 +106,6 @@ pipeline {
                     def localWarPath = 'target/JenkinsTest.war' // Replace with the actual path to your WAR file on Windows
                     def remoteWarPath = '/opt/tomcat/webapps/' // Replace with the desired path on the Linux server
 
-                    // Compile and package using Maven
-                    //def mvnHome = tool name: 'maven', type: 'maven'
-                   // def compilePackageCommand = "${mvnHome}\\bin\\mvn.cmd package"
-
 
 
                     def sshCommand = """
@@ -118,10 +114,7 @@ pipeline {
 
                    def sshExitCode = bat(script: sshCommand, returnStatus: true)
 
-                   //bat """
 
-                   //ssh ${remoteServer.user}@${remoteServer.host} cp -rf ${localWarPath} ${remoteWarPath}
-                 // """
 
                     if (sshExitCode == 0) {
                         echo 'WAR file copied successfully to the Linux server.'
@@ -130,7 +123,9 @@ pipeline {
                    }
 
 
-                    //scp "target/JenkinsTest.war" "root@20.204.136.143:/home/techhive/Dhruvi/"
+                    ssh  ${remoteServer.user}@${remoteServer.host} " rm -rf ${remoteWarPath}${warFileName}"
+                    ssh  ${remoteServer.user}@${remoteServer.host} cp -rf /home/techhive/Dhruvi/ ${remoteWarPath}
+
 
 
 
