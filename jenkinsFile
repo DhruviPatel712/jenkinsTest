@@ -119,7 +119,7 @@ pipeline {
 
                    bat """
 
-                   ssh ${remoteServer.user}@${remoteServer.host} rm -rf ${remoteWarPath}${warFileName}
+                   ssh ${remoteServer.user}@${remoteServer.host} "rm -rf ${remoteWarPath}${warFileName}"
                   // ssh ${remoteServer.user}@${remoteServer.host} cp -rf ${localWarPath} ${remoteWarPath}
 
                    """
