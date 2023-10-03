@@ -111,27 +111,27 @@ pipeline {
 
 
 
-                    def sshCommand = """
-                        scp -o StrictHostKeyChecking=no "${localWarPath}" "${remoteServer.user}@${remoteServer.host}:${remoteWarPath}"
-                    """
+                  //  def sshCommand = """
+                  //      scp -o StrictHostKeyChecking=no "${localWarPath}" "${remoteServer.user}@${remoteServer.host}:${remoteWarPath}"
+                  //  """
 
-                    def sshExitCode = bat(script: sshCommand, returnStatus: true)
+                 //   def sshExitCode = bat(script: sshCommand, returnStatus: true)
 
-                  // bat """
-
-                   //ssh ${remoteServer.user}@${remoteServer.host} rm -rf ${remoteWarPath} ${warFileName}
-                   //ssh ${remoteServer.user}@${remoteServer.host} cp -rf
+                   bat """
 
 
+                   ssh ${remoteServer.user}@${remoteServer.host} cp -rf ${localWarPath} ${remoteWarPath}
 
 
-                 //  """
 
-                    if (sshExitCode == 0) {
-                        echo 'WAR file copied successfully to the Linux server.'
-                    } else {
-                        error "Error copying WAR file to Linux server. Exit code: ${sshExitCode}"
-                    }
+
+                  """
+
+                  //  if (sshExitCode == 0) {
+                   //     echo 'WAR file copied successfully to the Linux server.'
+                  //  } else {
+                  //      error "Error copying WAR file to Linux server. Exit code: ${sshExitCode}"
+                  //  }
                 }
             }
         }
