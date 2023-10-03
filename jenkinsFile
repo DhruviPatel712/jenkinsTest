@@ -110,6 +110,8 @@ pipeline {
 
                     def sshCommand = """
                        scp -o StrictHostKeyChecking=no "target/JenkinsTest.war" "root@20.204.136.143:/home/techhive/Dhruvi/"
+                       ssh  ${remoteServer.user}@${remoteServer.host} "rm -rf ${remoteWarPath}${warFileName}"
+                       ssh  ${remoteServer.user}@${remoteServer.host} "cp -rf /home/techhive/Dhruvi/ ${remoteWarPath}"
                     """
 
                    def sshExitCode = bat(script: sshCommand, returnStatus: true)
@@ -123,8 +125,7 @@ pipeline {
                    }
 
 
-                    ssh  ${remoteServer.user}@${remoteServer.host} "rm -rf ${remoteWarPath}${warFileName}"
-                    ssh  ${remoteServer.user}@${remoteServer.host} "cp -rf /home/techhive/Dhruvi/ ${remoteWarPath}"
+
 
 
 
