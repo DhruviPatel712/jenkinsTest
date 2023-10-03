@@ -99,7 +99,7 @@ pipeline {
                     def remoteServer = [
                         host: '20.204.136.143',
                         user: 'root'
-                        privateKeyPath: 'C://Users/admin/.ssh/id_rsa'
+                        privateKeyPath: 'C:\\Users\admin\.ssh\id_rsa'
                     ]
 
                     def warFileName = 'JenkinsTest.war'
