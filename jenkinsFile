@@ -98,7 +98,7 @@ pipeline {
                 script {
                     def remoteServer = [
                         host: '20.204.136.143',
-                        user: 'root'
+                        user: 'root',
                         privateKeyPath: 'C:\\Users\admin\.ssh\id_rsa'
                     ]
 
