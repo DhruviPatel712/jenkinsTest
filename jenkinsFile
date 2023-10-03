@@ -107,7 +107,7 @@ pipeline {
 
 
                   bat """
-                  ssh ${remoteServer.user}@${remoteServer.host} "copy ${localWarPath} ${remoteWarPath}"
+                  ssh ${remoteServer.user}@${remoteServer.host} "xcopy /Y ${localWarPath} ${remoteWarPath}"
                   """
 
                 }
