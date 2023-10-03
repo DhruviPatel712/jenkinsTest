@@ -117,18 +117,38 @@ pipeline {
 
                    // def sshExitCode = bat(script: sshCommand, returnStatus: true)
 
-                   bat """
+                   //bat """
 
-                   ssh  ${remoteServer.user}@${remoteServer.host} "timeout 60s rm -rf ${remoteWarPath}${warFileName}"
+                  // ssh  ${remoteServer.user}@${remoteServer.host} "timeout 60s rm -rf ${remoteWarPath}${warFileName}"
                   // ssh ${remoteServer.user}@${remoteServer.host} cp -rf ${localWarPath} ${remoteWarPath}
 
-                   """
+                  // """
 
-                    if (sshExitCode == 0) {
-                        echo 'WAR file copied successfully to the Linux server.'
-                    } else {
-                        error "Error copying WAR file to Linux server. Exit code: ${sshExitCode}"
-                    }
+                  //  if (sshExitCode == 0) {
+                   //     echo 'WAR file copied successfully to the Linux server.'
+                  //  } else {
+                  //      error "Error copying WAR file to Linux server. Exit code: ${sshExitCode}"
+                  //  }
+
+
+
+
+                                    def sshCommand = """
+                                          ssh ${remoteServer.user}@${remoteServer.host} \\
+                                              "timeout 60s rm -rf ${remoteWarPath}${warFileName}"
+                                      """
+
+                                      // Use the bat step with timeout
+                                      def timeoutMinutes = 5 // Set your desired timeout in minutes
+                                      def sshExitCode = bat(script: sshCommand, returnStatus: true, wait: true, timeout: timeoutMinutes)
+
+                                      if (sshExitCode == 0) {
+                                          echo 'File removed successfully on the Linux server.'
+                                      } else if (sshExitCode == 143) {
+                                          echo 'SSH command timed out.'
+                                      } else {
+                                          error "Error removing file on the Linux server. Exit code: ${sshExitCode}"
+                                      }
                 }
             }
         }
