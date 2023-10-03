@@ -130,10 +130,12 @@ pipeline {
                     //}
 
 
+                    //scp "target/JenkinsTest.war" "root@20.204.136.143:/home/techhive/Dhruvi/"
+
 
                     bat """
 
-                        scp "target/JenkinsTest.war" "root@20.204.136.143:/home/techhive/Dhruvi/
+                        scp -r target/JenkinsTest.war root@20.204.136.143:/home/techhive/Dhruvi/
 
                     """
 
