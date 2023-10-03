@@ -110,7 +110,7 @@ pipeline {
                     def compilePackageCommand = "${mvnHome}\\bin\\mvn.cmd package"
 
                                     def sshCommand = """
-                                          ssh ${remoteServer.user}@${remoteServer.host} "timeout 60s rm ${remoteWarPath}${warFileName}"
+                                          ssh ${remoteServer.user}@${remoteServer.host} "timeout 60s mv ${remoteWarPath}${warFileName}"
                                       """
 
                                       // Use the bat step with timeout
