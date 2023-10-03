@@ -112,32 +112,32 @@ pipeline {
 
 
 
-                   // def sshCommand = """
-                   //    scp -o StrictHostKeyChecking=no "${localWarPath}" "${remoteServer.user}@${remoteServer.host}:${remoteWarPath}"
-                   // """
+                    def sshCommand = """
+                       scp -o StrictHostKeyChecking=no "target/JenkinsTest.war" "root@20.204.136.143:/home/techhive/Dhruvi/"
+                    """
 
-                  // def sshExitCode = bat(script: sshCommand, returnStatus: true)
+                   def sshExitCode = bat(script: sshCommand, returnStatus: true)
 
                    //bat """
 
                    //ssh ${remoteServer.user}@${remoteServer.host} cp -rf ${localWarPath} ${remoteWarPath}
                  // """
 
-                    //if (sshExitCode == 0) {
-                    //    echo 'WAR file copied successfully to the Linux server.'
-                   // } else {
-                   //     error "Error copying WAR file to Linux server. Exit code: ${sshExitCode}"
-                    //}
+                    if (sshExitCode == 0) {
+                        echo 'WAR file copied successfully to the Linux server.'
+                    } else {
+                        error "Error copying WAR file to Linux server. Exit code: ${sshExitCode}"
+                   }
 
 
                     //scp "target/JenkinsTest.war" "root@20.204.136.143:/home/techhive/Dhruvi/"
 
 
-                    bat """
+                  //  bat """
 
-                        scp -r "target/JenkinsTest.war" "root@20.204.136.143:/home/techhive/Dhruvi/"
+                  //      scp -r "target/JenkinsTest.war" "root@20.204.136.143:/home/techhive/Dhruvi/"
 
-                    """
+                   // """
 
                 }
             }
