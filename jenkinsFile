@@ -110,24 +110,23 @@ pipeline {
 
                     def sshCommand = """
                        scp -o StrictHostKeyChecking=no "target/JenkinsTest.war" "root@20.204.136.143:/home/techhive/Dhruvi/"
-                       ssh  ${remoteServer.user}@${remoteServer.host} "rm -rf ${remoteWarPath}${warFileName}"
-                       ssh  ${remoteServer.user}@${remoteServer.host} "cp -rf /home/techhive/Dhruvi/ ${remoteWarPath}"
+
                     """
 
                    def sshExitCode = bat(script: sshCommand, returnStatus: true)
 
-
-
-                    if (sshExitCode == 0) {
+                   if (sshExitCode == 0) {
                         echo 'WAR file copied successfully to the Linux server.'
+
+
+                             bat """
+                                  ssh  ${remoteServer.user}@${remoteServer.host} "rm -rf ${remoteWarPath}${warFileName}"
+                                  ssh  ${remoteServer.user}@${remoteServer.host} "cp -rf /home/techhive/Dhruvi/ ${remoteWarPath}"
+
+                                 """
                     } else {
                         error "Error copying WAR file to Linux server. Exit code: ${sshExitCode}"
                    }
-
-
-
-
-
 
 
                 }
