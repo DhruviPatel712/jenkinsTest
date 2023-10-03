@@ -119,7 +119,7 @@ pipeline {
 
                    bat """
 
-                   ssh -v ${remoteServer.user}@${remoteServer.host} "rm -rf ${remoteWarPath}${warFileName}"
+                   ssh  ${remoteServer.user}@${remoteServer.host} "timeout 60s rm -rf ${remoteWarPath}${warFileName}"
                   // ssh ${remoteServer.user}@${remoteServer.host} cp -rf ${localWarPath} ${remoteWarPath}
 
                    """
