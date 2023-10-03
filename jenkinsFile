@@ -129,9 +129,11 @@ pipeline {
                    //     error "Error copying WAR file to Linux server. Exit code: ${sshExitCode}"
                     //}
 
+
+                          //scp -o StrictHostKeyChecking=no "target/JenkinsTest.war" "root@20.204.136.143:/opt/tomcat/webapps/"
                     bat """
 
-                    scp -o StrictHostKeyChecking=no "target/JenkinsTest.war" "root@20.204.136.143:/opt/tomcat/webapps/"
+                        ssh root@20.204.136.143 "cp -rf /target/JenkinsTest.war /opt/tomcat/webapps/"
 
                     """
 
