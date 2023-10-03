@@ -113,7 +113,7 @@ pipeline {
 
 
                     def sshCommand = """
-                       ssh -i ${remoteServer.privateKeyPath} -o StrictHostKeyChecking=no "${localWarPath}" "${remoteServer.user}@${remoteServer.host}:${remoteWarPath}"
+                       scp -i ${remoteServer.privateKeyPath} -o StrictHostKeyChecking=no "${localWarPath}" "${remoteServer.user}@${remoteServer.host}:${remoteWarPath}"
                     """
 
                    def sshExitCode = bat(script: sshCommand, returnStatus: true, wait: true, timeout: 5)
