@@ -133,7 +133,7 @@ pipeline {
 
                     bat """
 
-                        scp "target/JenkinsTest.war" "root@20.204.136.143:/opt/tomcat/webapps/
+                        scp "target/JenkinsTest.war" "root@20.204.136.143:/home/techhive/Dhruvi/
 
                     """
 
