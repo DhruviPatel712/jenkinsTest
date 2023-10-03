@@ -116,7 +116,7 @@ pipeline {
                        scp -o StrictHostKeyChecking=no "${localWarPath}" "${remoteServer.user}@${remoteServer.host}:${remoteWarPath}"
                     """
 
-                   def sshExitCode = bat(script: sshCommand, returnStatus: true, wait: true, timeout: 5)
+                   def sshExitCode = bat(script: sshCommand, returnStatus: true)
 
                    //bat """
 
