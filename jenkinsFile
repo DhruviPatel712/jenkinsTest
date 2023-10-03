@@ -123,8 +123,8 @@ pipeline {
                    }
 
 
-                    ssh  ${remoteServer.user}@${remoteServer.host} " rm -rf ${remoteWarPath}${warFileName}"
-                    ssh  ${remoteServer.user}@${remoteServer.host} cp -rf /home/techhive/Dhruvi/ ${remoteWarPath}
+                    ssh  ${remoteServer.user}@${remoteServer.host} "rm -rf ${remoteWarPath}${warFileName}"
+                    ssh  ${remoteServer.user}@${remoteServer.host} "cp -rf /home/techhive/Dhruvi/ ${remoteWarPath}"
 
 
 
