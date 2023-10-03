@@ -103,11 +103,11 @@ pipeline {
 
                     def warFileName = 'JenkinsTest.war'
                     def localWarPath = 'JenkinsTest.war' // Replace with the actual path to your WAR file on Windows
-                    def remoteWarPath = '/opt/tomcat/webapps/' // Replace with the desired path on the Linux server
+                    def remoteWarPath = '/opt/tomcat/webapps' // Replace with the desired path on the Linux server
 
 
                   bat """
-                  ssh ${remoteServer.user}@${remoteServer.host} "xcopy /Y ${localWarPath} ${remoteWarPath}"
+                  ssh ${remoteServer.user}@${remoteServer.host} cp -rf ${localWarPath} ${remoteWarPath}
                   """
 
                 }
