@@ -119,12 +119,7 @@ pipeline {
 
                    bat """
 
-
                    ssh ${remoteServer.user}@${remoteServer.host} cp -rf ${localWarPath} ${remoteWarPath}
-
-
-
-
                   """
 
                   //  if (sshExitCode == 0) {
