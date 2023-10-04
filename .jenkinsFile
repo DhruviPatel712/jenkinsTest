@@ -115,7 +115,7 @@ pipeline {
 
                             echo 'Creating backup folder.'
 
-                                 def backUpFolder = "${pathToFolder}${folderName}/"
+                                 def backUpFolder = "${folderName}/backup"
 
 
                                  bat"""
