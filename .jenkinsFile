@@ -103,7 +103,7 @@ pipeline {
 
                             echo "${pathToFolder}update-${timestamp}"
                                                  // Create the folder
-                                 bat "mkdir -p ${folderName}"
+                                 bat "mkdir ${folderName}"
 
 
                             echo 'Folder created ${folderName}'
@@ -113,7 +113,7 @@ pipeline {
 
                                    def backUpFolder = "${pathToFolder}${folderName}/"
 
-                                   bat "mkdir -p ${backUpFolder}"
+                                   bat "mkdir ${backUpFolder}"
 
 
                             echo 'Backup folder created ${backUpFolder}'
