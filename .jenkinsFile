@@ -101,24 +101,28 @@ pipeline {
                                 def folderName = "${pathToFolder}update_${timestamp}"
 
 
-                            echo "${pathToFolder}update-${timestamp}"
+                            echo "${pathToFolder}update_${timestamp}"
                                                  // Create the folder
                                  //bat "mkdir ${folderName}"
-                                 bat"""
-
-                                 ssh  ${remoteServer.user}@${remoteServer.host} "mkdir -p ${folderName}"
-
-                                 """
+//                                  bat"""
+//
+//                                  ssh  ${remoteServer.user}@${remoteServer.host} "mkdir -p ${folderName}"
+//
+//                                  """
 
                             echo 'Folder created ${folderName}'
 
 
                             echo 'Creating backup folder.'
 
-                                   def backUpFolder = "${pathToFolder}${folderName}/"
+                                 def backUpFolder = "${pathToFolder}${folderName}/"
 
-                                   bat "mkdir -p ${backUpFolder}"
 
+                                 bat"""
+
+                                 ssh  ${remoteServer.user}@${remoteServer.host} "mkdir -p ${backUpFolder}"
+
+                                 """
 
                             echo 'Backup folder created ${backUpFolder}'
 
