@@ -59,7 +59,7 @@ pipeline {
                                 echo 'Tacking backup of old war'
 
                                         sh """
-                                            ssh  ${remoteServer.user}@${remoteServer.host} "cp -rf ${remoteWarPath}/${warFileName}  ${backUpFolder}"
+                                            ssh  ${remoteServer.user}@${remoteServer.host} "cp -rf ${remoteWarPath}${warFileName}  ${backUpFolder}"
                                          """
                                 echo 'backup created in ${backUpFolder}'
 
