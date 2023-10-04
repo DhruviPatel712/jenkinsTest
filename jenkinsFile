@@ -81,7 +81,6 @@ pipeline {
 
  stages {
 
-
     stage('Build WAR') {
                 steps {
                     script {
@@ -105,25 +104,61 @@ pipeline {
                     def warFileName = 'JenkinsTest.war'
                     def localWarPath = 'target/JenkinsTest.war' // Replace with the actual path to your WAR file on Windows
                     def remoteWarPath = '/opt/tomcat/webapps/' // Replace with the desired path on the Linux server
+                    def pathToFolder ='/home/techhive/'
 
 
+                    echo 'Creating update folder.'
 
-                    def sshCommand = """
-                       scp -o StrictHostKeyChecking=no "target/JenkinsTest.war" "root@20.204.136.143:/home/techhive/Dhruvi/"
 
-                    """
+                            def timestamp = new Date().format("yyyy-MM-dd")
+                            def folderName = "${pathToFolder}"update-"${timestamp}"
+
+                             // Create the folder
+                            bat "mkdir -p ${folderName}"
+
+
+                    echo 'Folder created ${folderName}'
+
+
+                    echo 'Creating backup folder.'
+
+                            def backUpFolder = "${pathToFolder}${folderName}/"
+
+                            bat "mkdir -p ${backUpFolder}"
+
+
+                    echo 'Backup folder created ${backUpFolder}'
+
+                    echo 'Tacking backup of old war'
+
+                            bat """
+                                ssh  ${remoteServer.user}@${remoteServer.host} "cp -rf ${remoteWarPath}/${warFileName}  ${backUpFolder}"
+                             """
+                    echo 'backup created in ${backUpFolder}'
+
+
+                    echo 'Take new War and uplod to upload folder'
+
+                            def sshCommand = """
+                                scp -o StrictHostKeyChecking=no "target/${warFileName}" "${remoteServer.user}@${remoteServer.host}:${pathToFolder}${folderName}"
+
+                            """
 
                    def sshExitCode = bat(script: sshCommand, returnStatus: true)
 
                    if (sshExitCode == 0) {
                         echo 'WAR file copied successfully to the Linux server.'
 
+                              echo 'Remove war file and copy in webApps'
 
-                             bat """
-                                  ssh  ${remoteServer.user}@${remoteServer.host} "rm -rf ${remoteWarPath}${warFileName}"
-                                  ssh  ${remoteServer.user}@${remoteServer.host} "cp -rf /home/techhive/Dhruvi/JenkinsTest.war ${remoteWarPath}"
+                                     bat """
+                                         ssh  ${remoteServer.user}@${remoteServer.host} "rm -rf ${remoteWarPath}${warFileName}"
+                                         ssh  ${remoteServer.user}@${remoteServer.host} "cp -rf ${pathToFolder}${folderName}/${warFileName} ${remoteWarPath}"
 
-                                 """
+                                         """
+
+
+                              echo 'Remove war file and copy in webApps done'
                     } else {
                         error "Error copying WAR file to Linux server. Exit code: ${sshExitCode}"
                    }
