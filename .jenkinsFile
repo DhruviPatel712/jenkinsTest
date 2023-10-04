@@ -32,7 +32,7 @@ pipeline {
 
 
                             def timestamp = new Date().format("yyyy-MM-dd_HH-mm-ss")
-                            def folderName = "${pathToFolder}"update-"${timestamp}"
+                            def folderName = ${pathToFolder}"update-"${timestamp}
 
 
                             echo folderName
