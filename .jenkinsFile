@@ -118,11 +118,11 @@ pipeline {
                                  def backUpFolder = "${folderName}/backup"
 
 
-                                 bat"""
-
-                                 ssh  ${remoteServer.user}@${remoteServer.host} "mkdir -p ${backUpFolder}"
-
-                                 """
+//                                  bat"""
+//
+//                                  ssh  ${remoteServer.user}@${remoteServer.host} "mkdir -p ${backUpFolder}"
+//
+//                                  """
 
                             echo 'Backup folder created ${backUpFolder}'
 
