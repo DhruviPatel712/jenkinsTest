@@ -17,6 +17,8 @@ pipeline {
         stage('Copy WAR to Linux Server') {
             steps {
                 script {
+
+
                     def remoteServer = [
                         host: '20.204.136.143',
                         user: 'root'
@@ -28,63 +30,131 @@ pipeline {
                     def pathToFolder ='/home/techhive/'
 
 
-                    echo 'Creating update folder.'
+                if(isUnix()){
+
+                                echo 'Creating update folder.'
 
 
-                            def timestamp = new Date().format("yyyy-MM-dd")
-                            def folderName = "${pathToFolder}update-${timestamp}"
+                                        def timestamp = new Date().format("yyyy-MM-dd")
+                                        def folderName = "${pathToFolder}update-${timestamp}"
+
+
+                                        echo "${pathToFolder}update-${timestamp}"
+                                         // Create the folder
+                                        sh "mkdir -p ${folderName}"
+
+
+                                echo 'Folder created ${folderName}'
+
+
+                                echo 'Creating backup folder.'
+
+                                        def backUpFolder = "${pathToFolder}${folderName}/"
+
+                                        sh "mkdir -p ${backUpFolder}"
+
+
+                                echo 'Backup folder created ${backUpFolder}'
+
+                                echo 'Tacking backup of old war'
+
+                                        sh """
+                                            ssh  ${remoteServer.user}@${remoteServer.host} "cp -rf ${remoteWarPath}/${warFileName}  ${backUpFolder}"
+                                         """
+                                echo 'backup created in ${backUpFolder}'
+
+
+                                echo 'Take new War and uplod to upload folder'
+
+                                        def sshCommand = """
+                                            scp -o StrictHostKeyChecking=no "target/${warFileName}" "${remoteServer.user}@${remoteServer.host}:${pathToFolder}${folderName}"
+
+                                        """
+
+                               def sshExitCode = sh(script: sshCommand, returnStatus: true)
+
+                               if (sshExitCode == 0) {
+                                    echo 'WAR file copied successfully to the Linux server.'
+
+                                          echo 'Remove war file and copy in webApps'
+
+                                                 sh """
+                                                     ssh  ${remoteServer.user}@${remoteServer.host} "rm -rf ${remoteWarPath}${warFileName}"
+                                                     ssh  ${remoteServer.user}@${remoteServer.host} "cp -rf ${pathToFolder}${folderName}/${warFileName} ${remoteWarPath}"
+
+                                                     """
+
+
+                                          echo 'Remove war file and copy in webApps done'
+                                } else {
+                                    error "Error copying WAR file to Linux server. Exit code: ${sshExitCode}"
+                               }
+
+                            }
+
+                   else{
+
+                            echo 'Creating update folder.'
+
+
+                                def timestamp = new Date().format("yyyy-MM-dd")
+                                def folderName = "${pathToFolder}update-${timestamp}"
 
 
                             echo "${pathToFolder}update-${timestamp}"
-                             // Create the folder
-                            bat "mkdir -p ${folderName}"
+                                                 // Create the folder
+                                 bat "mkdir -p ${folderName}"
 
 
-                    echo 'Folder created ${folderName}'
+                            echo 'Folder created ${folderName}'
 
 
-                    echo 'Creating backup folder.'
+                            echo 'Creating backup folder.'
 
-                            def backUpFolder = "${pathToFolder}${folderName}/"
+                                   def backUpFolder = "${pathToFolder}${folderName}/"
 
-                            bat "mkdir -p ${backUpFolder}"
-
-
-                    echo 'Backup folder created ${backUpFolder}'
-
-                    echo 'Tacking backup of old war'
-
-                            bat """
-                                ssh  ${remoteServer.user}@${remoteServer.host} "cp -rf ${remoteWarPath}/${warFileName}  ${backUpFolder}"
-                             """
-                    echo 'backup created in ${backUpFolder}'
+                                   bat "mkdir -p ${backUpFolder}"
 
 
-                    echo 'Take new War and uplod to upload folder'
+                            echo 'Backup folder created ${backUpFolder}'
 
-                            def sshCommand = """
-                                scp -o StrictHostKeyChecking=no "target/${warFileName}" "${remoteServer.user}@${remoteServer.host}:${pathToFolder}${folderName}"
-
-                            """
-
-                   def sshExitCode = bat(script: sshCommand, returnStatus: true)
-
-                   if (sshExitCode == 0) {
-                        echo 'WAR file copied successfully to the Linux server.'
-
-                              echo 'Remove war file and copy in webApps'
+                            echo 'Tacking backup of old war'
 
                                      bat """
-                                         ssh  ${remoteServer.user}@${remoteServer.host} "rm -rf ${remoteWarPath}${warFileName}"
-                                         ssh  ${remoteServer.user}@${remoteServer.host} "cp -rf ${pathToFolder}${folderName}/${warFileName} ${remoteWarPath}"
-
+                                           ssh  ${remoteServer.user}@${remoteServer.host} "cp -rf ${remoteWarPath}/${warFileName}  ${backUpFolder}"
                                          """
+                            echo 'backup created in ${backUpFolder}'
 
 
-                              echo 'Remove war file and copy in webApps done'
-                    } else {
-                        error "Error copying WAR file to Linux server. Exit code: ${sshExitCode}"
-                   }
+                            echo 'Take new War and uplod to upload folder'
+
+                                     def sshCommand = """
+                                                    scp -o StrictHostKeyChecking=no "target/${warFileName}" "${remoteServer.user}@${remoteServer.host}:${pathToFolder}${folderName}"
+
+                                                """
+
+                                     def sshExitCode = bat(script: sshCommand, returnStatus: true)
+
+                                     if (sshExitCode == 0) {
+                                            echo 'WAR file copied successfully to the Linux server.'
+
+                                                  echo 'Remove war file and copy in webApps'
+
+                                                         bat """
+                                                             ssh  ${remoteServer.user}@${remoteServer.host} "rm -rf ${remoteWarPath}${warFileName}"
+                                                             ssh  ${remoteServer.user}@${remoteServer.host} "cp -rf ${pathToFolder}${folderName}/${warFileName} ${remoteWarPath}"
+
+                                                             """
+
+
+                                                  echo 'Remove war file and copy in webApps done'
+                                        } else {
+                                            error "Error copying WAR file to Linux server. Exit code: ${sshExitCode}"
+                                     }
+
+                    }
+
+
 
 
                 }
