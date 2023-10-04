@@ -104,11 +104,11 @@ pipeline {
                             echo "${pathToFolder}update_${timestamp}"
                                                  // Create the folder
                                  //bat "mkdir ${folderName}"
-                                 bat"""
-
-                                 ssh  ${remoteServer.user}@${remoteServer.host} "mkdir -p ${folderName}"
-
-                                 """
+//                                  bat"""
+//
+//                                  ssh  ${remoteServer.user}@${remoteServer.host} "mkdir -p ${folderName}"
+//
+//                                  """
 
                             echo 'Folder created ${folderName}'
 
