@@ -31,7 +31,7 @@ pipeline {
                     echo 'Creating update folder.'
 
 
-                            def timestamp = new Date().format("yyyy-MM-dd_HH-mm-ss")
+                            def timestamp = new Date().format("yyyy-MM-dd")
                             def folderName = ${pathToFolder}"update-"${timestamp}
 
 
